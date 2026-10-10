@@ -1,0 +1,154 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Heated backward-facing step (Vogel & Eaton 1985)
+// All coordinates are in units of step height h = 0.0381 m
+//   inlet channel : x = -10h .. 0,  y = 0 .. 4h
+//   step          : x = 0, y = -h .. 0
+//   downstream    : x = 0 .. 30h,   y = -h .. 4h  (height 5h, ER = 1.25)
+// 2D: one cell in z (empty patches)
+
+convertToMeters 0.0381;
+
+vertices
+(
+    (-10  0 0)    // 0
+    (  0  0 0)    // 1
+    ( 30  0 0)    // 2
+    (-10  4 0)    // 3
+    (  0  4 0)    // 4
+    ( 30  4 0)    // 5
+    (  0 -1 0)    // 6
+    ( 30 -1 0)    // 7
+
+    (-10  0 0.1)  // 8
+    (  0  0 0.1)  // 9
+    ( 30  0 0.1)  // 10
+    (-10  4 0.1)  // 11
+    (  0  4 0.1)  // 12
+    ( 30  4 0.1)  // 13
+    (  0 -1 0.1)  // 14
+    ( 30 -1 0.1)  // 15
+);
+
+// y-grading: first cell ~0.03 mm at walls (y+ ~ 1), symmetric
+// x-grading: finer near the step, coarser downstream
+blocks
+(
+    // 0: inlet channel
+    hex (0 1 4 3 8 9 12 11) (80 110 1)
+    simpleGrading
+    (
+        5
+        ((0.5 0.5 250) (0.5 0.5 0.004))
+        1
+    )
+
+    // 1: below step (heated wall at bottom)
+    hex (6 7 2 1 14 15 10 9) (240 70 1)
+    simpleGrading
+    (
+        ((0.35 0.6 3) (0.65 0.4 3))
+        ((0.5 0.5 77) (0.5 0.5 0.013))
+        1
+    )
+
+    // 2: downstream, above step height
+    hex (1 2 5 4 9 10 13 12) (240 110 1)
+    simpleGrading
+    (
+        ((0.35 0.6 3) (0.65 0.4 3))
+        ((0.5 0.5 250) (0.5 0.5 0.004))
+        1
+    )
+);
+
+edges
+(
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 8 11 3)
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (7 2 10 15)
+            (2 5 13 10)
+        );
+    }
+
+    // Adiabatic: upstream floor + step face
+    stepWall
+    {
+        type wall;
+        faces
+        (
+            (0 1 9 8)
+            (6 14 9 1)
+        );
+    }
+
+    // Constant heat flux wall: downstream floor
+    heatedWall
+    {
+        type wall;
+        faces
+        (
+            (6 7 15 14)
+        );
+    }
+
+    // Adiabatic: top wall
+    topWall
+    {
+        type wall;
+        faces
+        (
+            (3 11 12 4)
+            (4 12 13 5)
+        );
+    }
+
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            (0 3 4 1)
+            (6 1 2 7)
+            (1 4 5 2)
+            (8 9 12 11)
+            (14 15 10 9)
+            (9 10 13 12)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
