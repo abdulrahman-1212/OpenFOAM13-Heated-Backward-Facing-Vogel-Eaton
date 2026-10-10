@@ -2,8 +2,6 @@
 
 RANS simulation of the Vogel & Eaton (1985) backward-facing step with heat transfer, run in OpenFOAM 13 and validated against the experimental Nusselt number distribution (Ansys verification case VMFL013).
 
-> Items marked **[UPDATE]** should be replaced with final numbers once the boundary-layer inlet run is complete.
-
 ---
 
 ## 1. Physical problem
@@ -43,10 +41,10 @@ Air flows through a channel of height 4h and expands suddenly into a channel of 
 | Turbulent Prandtl number | 0.85 (`compressible::alphatWallFunction`) |
 | Thermophysics | `heRhoThermo`, `perfectGas`, `hConst`, μ = 1.85×10⁻⁵ Pa·s, Cp = 1005 J/(kg·K), Pr = 0.71 |
 | Time stepping | Steady state, 5000 iterations |
-| Convection schemes | Momentum: `bounded Gauss linearUpwind`; energy, k, ω: `bounded Gauss upwind` |
+| Convection schemes | Momentum: `bounded Gauss linearUpwind`; energy, k, omega: `bounded Gauss upwind` |
 | Heated wall condition | `externalWallHeatFluxTemperature`, mode `flux`, q = 270 W/m² |
 | Outlet | Fixed static pressure 10⁵ Pa |
-| Inlet | **[UPDATE]** Uniform 11.5 m/s in the first run. Final run: 1/7-power-law boundary layer, δ = 1.1h on both walls, free-stream U = 11.71 m/s, with matching k and ω profiles (`inletProfile.py`) |
+| Inlet | Uniform 11.5 m/s in the first run. Final run: 1/7-power-law boundary layer, delta = 1.1h on both walls, free-stream U = 11.71 m/s, with matching k and Omega profiles (`inletProfile.py`) |
 
 The Mach number is about 0.03, so compressibility effects are negligible. The `fluid` module was chosen because the incompressible module does not solve for temperature.
 
@@ -80,21 +78,18 @@ The maximum on `stepWall` is localised at the step corner. On the heated wall, w
 
 **Figure 2: Computational mesh.**
 
-![Figure 2 - Mesh overview](figures/fig02_mesh_overview.png)
-
-![Figure 3 - Mesh detail near the step corner and heated wall](figures/fig03_mesh_step_detail.png)
+![Figure 2 - Mesh overview](mesh.png)
 
 ---
 
 ## 4. Inlet condition
 
-**[UPDATE]** The experiment has a developed boundary layer of thickness about 1.1h at the step. A 10h channel with a uniform inlet cannot reproduce this, so a boundary-layer profile is imposed instead.
 
-- Velocity: 1/7 power law, U = U∞ (d/δ)^(1/7), with d the distance to the nearest wall and δ = 1.1h.
+- Velocity: 1/7 power law, U = U_inf (d/delta)^(1/7), with d the distance to the nearest wall and delta = 1.1h.
 - k: free-stream level (2% intensity) plus a near-wall contribution from an estimated friction velocity.
-- ω: free stream from νt/ν = 10, near wall from a mixing-length estimate.
+- Omega: free stream from nu_t/ν = 10, near wall from a mixing-length estimate.
 
-**Figure 4: Inlet profiles of U, k and ω.**
+**Figure 4: Inlet profiles of U, k and Omega.**
 
 ![Figure 4 - Inlet profiles](inlet_profile.png)
 ---
@@ -107,7 +102,7 @@ Reattachment was located from the sign change of the wall shear stress on the he
 
 | Quantity | CFD | Experiment |
 |---|---|---|
-| Reattachment length x_r/h | 6.59 **[UPDATE]** | about 6.7 |
+| Reattachment length x_r/h | 6.59 | about 6.7 |
 
 The small positive wall shear and the dip in Nu close to the step (x/h < 1.2) are the secondary corner eddy.
 
@@ -135,7 +130,7 @@ The CFD Stanton number was converted to a Nusselt number using Nu = St · Re_h �
 
 **Figure 7: Temperature contours near the heated wall.**
 
-![Figure 7 - Temperature field](figures/fig07_temperature.png)
+![Figure 7 - Temperature field](T_field.png)
 
 ---
 
