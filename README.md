@@ -29,8 +29,6 @@ Air flows through a channel of height 4h and expands suddenly into a channel of 
 
 ![Figure 1 - Domain schematic with patch names: inlet, outlet, stepWall, heatedWall, topWall](figures/fig01_domain.png)
 
-*Placeholder: schematic showing h, 4h and 5h heights, 10h and 30h lengths, and patch names.*
-
 ---
 
 ## 2. Solver and models
@@ -45,7 +43,7 @@ Air flows through a channel of height 4h and expands suddenly into a channel of 
 | Turbulent Prandtl number | 0.85 (`compressible::alphatWallFunction`) |
 | Thermophysics | `heRhoThermo`, `perfectGas`, `hConst`, μ = 1.85×10⁻⁵ Pa·s, Cp = 1005 J/(kg·K), Pr = 0.71 |
 | Time stepping | Steady state, 5000 iterations |
-| Convection schemes | Momentum: `bounded Gauss linearUpwind`; energy, k, ω: `bounded Gauss upwind` **[UPDATE if second-order schemes are used]** |
+| Convection schemes | Momentum: `bounded Gauss linearUpwind`; energy, k, ω: `bounded Gauss upwind` |
 | Heated wall condition | `externalWallHeatFluxTemperature`, mode `flux`, q = 270 W/m² |
 | Outlet | Fixed static pressure 10⁵ Pa |
 | Inlet | **[UPDATE]** Uniform 11.5 m/s in the first run. Final run: 1/7-power-law boundary layer, δ = 1.1h on both walls, free-stream U = 11.71 m/s, with matching k and ω profiles (`inletProfile.py`) |
@@ -86,8 +84,6 @@ The maximum on `stepWall` is localised at the step corner. On the heated wall, w
 
 ![Figure 3 - Mesh detail near the step corner and heated wall](figures/fig03_mesh_step_detail.png)
 
-*Placeholder: whole-domain view and a zoom at the step corner showing wall refinement.*
-
 ---
 
 ## 4. Inlet condition
@@ -101,9 +97,6 @@ The maximum on `stepWall` is localised at the step corner. On the heated wall, w
 **Figure 4: Inlet profiles of U, k and ω.**
 
 ![Figure 4 - Inlet profiles](inlet_profile.png)
-
-*Placeholder: use `inlet_profile.png`.*
-
 ---
 
 ## 5. Results and validation
@@ -120,9 +113,7 @@ The small positive wall shear and the dip in Nu close to the step (x/h < 1.2) ar
 
 **Figure 5: Stanton number and skin friction along the heated wall.**
 
-![Figure 5 - St and Cf along heated wall with reattachment marker](figures/fig05_St_Cf.png)
-
-*Placeholder: use `bfs_results.png`.*
+![Figure 5 - St and Cf along heated wall with reattachment marker](bfs_results.png)
 
 ### 5.2 Heat transfer
 
@@ -137,24 +128,14 @@ The CFD Stanton number was converted to a Nusselt number using Nu = St · Re_h �
 
 **Figure 6: Nusselt number, CFD against experiment.**
 
-![Figure 6 - Nu comparison](Nu_comparison.png)
+![Figure 6 - Nu comparison](nu_comparison.png)
 
-*Placeholder: use `nu_comparison.png`.*
 
 ### 5.3 Temperature field
 
 **Figure 7: Temperature contours near the heated wall.**
 
 ![Figure 7 - Temperature field](figures/fig07_temperature.png)
-
-*Placeholder: ParaView screenshot of T, colour range 300 to 310 K, zoomed at the heated wall. The thermal boundary layer is thin, so the default 300 to 340 K range hides it.*
-
-### 5.4 Discussion
-
-- The reattachment length is predicted to within about 2% of the experiment.
-- The Nusselt number is overpredicted around its peak. This is a known behaviour of two-equation RANS models, including SST, in separated and reattaching flow.
-- Agreement improves downstream as the boundary layer re-attaches, with an error of about 4% at x/h ≈ 16.
-- **[UPDATE]** Describe the effect of the boundary-layer inlet on the peak, and of any scheme or Pr_t changes.
 
 ---
 
