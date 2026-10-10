@@ -100,7 +100,7 @@ The maximum on `stepWall` is localised at the step corner. On the heated wall, w
 
 **Figure 4: Inlet profiles of U, k and ω.**
 
-![Figure 4 - Inlet profiles](figures/fig04_inlet_profile.png)
+![Figure 4 - Inlet profiles](inlet_profile.png)
 
 *Placeholder: use `inlet_profile.png`.*
 
@@ -137,7 +137,7 @@ The CFD Stanton number was converted to a Nusselt number using Nu = St · Re_h �
 
 **Figure 6: Nusselt number, CFD against experiment.**
 
-![Figure 6 - Nu comparison](figures/fig06_Nu_comparison.png)
+![Figure 6 - Nu comparison](Nu_comparison.png)
 
 *Placeholder: use `nu_comparison.png`.*
 
